@@ -75,13 +75,6 @@ CREATE TABLE public.employees
     PRIMARY KEY (id)
 );
 
-CREATE TABLE public.employer_validate
-(
-    id integer NOT NULL,
-    validate_id integer NOT NULL,
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE public.employers
 (
     id integer NOT NULL,
@@ -162,12 +155,19 @@ CREATE TABLE public.schools
     PRIMARY KEY (id)
 );
 
+CREATE TABLE public.social_media_link_types
+(
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    link_type character varying(50) NOT NULL,
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE public.social_medias
 (
     id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
     candidate_id integer NOT NULL,
-    github_link character varying(500),
-    linkedin_link character varying(500),
+    link_type_id integer NOT NULL,
+    link character varying(1000) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -190,6 +190,24 @@ CREATE TABLE public.verification_employers
 (
     employer_id integer NOT NULL,
     id integer NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE public.workplace_candidate
+(
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    workplaces_id integer NOT NULL,
+    candidate_id integer NOT NULL,
+    job_title_id integer NOT NULL,
+    date_of_entry date NOT NULL,
+    date_of_graduation date,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE public.workplaces
+(
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    workplace_name character varying(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -241,18 +259,6 @@ ALTER TABLE public.employees
     NOT VALID;
 
 
-ALTER TABLE public.employer_validate
-    ADD FOREIGN KEY (id)
-    REFERENCES public.employers (id)
-    NOT VALID;
-
-
-ALTER TABLE public.employer_validate
-    ADD FOREIGN KEY (validate_id)
-    REFERENCES public.activation_code (id)
-    NOT VALID;
-
-
 ALTER TABLE public.employers
     ADD FOREIGN KEY (id)
     REFERENCES public.users (id)
@@ -284,8 +290,26 @@ ALTER TABLE public.language_candidates
 
 
 ALTER TABLE public.language_candidates
+    ADD FOREIGN KEY (candidate_id)
+    REFERENCES public.candidates (id)
+    NOT VALID;
+
+
+ALTER TABLE public.language_candidates
     ADD FOREIGN KEY (language_id)
     REFERENCES public.languages (id)
+    NOT VALID;
+
+
+ALTER TABLE public.language_candidates
+    ADD FOREIGN KEY (language_id)
+    REFERENCES public.languages (id)
+    NOT VALID;
+
+
+ALTER TABLE public.language_candidates
+    ADD FOREIGN KEY (language_level_id)
+    REFERENCES public.language_level (id)
     NOT VALID;
 
 
@@ -319,6 +343,12 @@ ALTER TABLE public.social_medias
     NOT VALID;
 
 
+ALTER TABLE public.social_medias
+    ADD FOREIGN KEY (link_type_id)
+    REFERENCES public.social_media_link_types (id)
+    NOT VALID;
+
+
 ALTER TABLE public.verification_candidates
     ADD FOREIGN KEY (id)
     REFERENCES public.activation_code (id)
@@ -328,6 +358,18 @@ ALTER TABLE public.verification_candidates
 ALTER TABLE public.verification_employers
     ADD FOREIGN KEY (id)
     REFERENCES public.activation_code (id)
+    NOT VALID;
+
+
+ALTER TABLE public.workplace_candidate
+    ADD FOREIGN KEY (candidate_id)
+    REFERENCES public.candidates (id)
+    NOT VALID;
+
+
+ALTER TABLE public.workplace_candidate
+    ADD FOREIGN KEY (workplaces_id)
+    REFERENCES public.workplaces (id)
     NOT VALID;
 
 END;
