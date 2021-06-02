@@ -193,14 +193,14 @@ CREATE TABLE public.verification_employers
     PRIMARY KEY (id)
 );
 
-CREATE TABLE public.workplace_candidate
+CREATE TABLE public.workplace_candidates
 (
-    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
-    workplaces_id integer NOT NULL,
-    candidate_id integer NOT NULL,
-    job_title_id integer NOT NULL,
-    date_of_entry date NOT NULL,
-    date_of_graduation date,
+    id integer NOT NULL,
+    date_of_entry date,
+    date_of_quit date,
+    candidate_id integer,
+    job_title_id integer,
+    workplaces_id integer,
     PRIMARY KEY (id)
 );
 
@@ -320,6 +320,12 @@ ALTER TABLE public.language_candidates
 
 
 ALTER TABLE public.school_candidates
+    ADD FOREIGN KEY (candidate_id)
+    REFERENCES public.candidates (id)
+    NOT VALID;
+
+
+ALTER TABLE public.school_candidates
     ADD FOREIGN KEY (school_department_id)
     REFERENCES public.school_departments (id)
     NOT VALID;
@@ -361,15 +367,21 @@ ALTER TABLE public.verification_employers
     NOT VALID;
 
 
-ALTER TABLE public.workplace_candidate
+ALTER TABLE public.workplace_candidates
     ADD FOREIGN KEY (candidate_id)
     REFERENCES public.candidates (id)
     NOT VALID;
 
 
-ALTER TABLE public.workplace_candidate
+ALTER TABLE public.workplace_candidates
     ADD FOREIGN KEY (workplaces_id)
     REFERENCES public.workplaces (id)
+    NOT VALID;
+
+
+ALTER TABLE public.workplace_candidates
+    ADD FOREIGN KEY (job_title_id)
+    REFERENCES public.job_titles (job_id)
     NOT VALID;
 
 END;
