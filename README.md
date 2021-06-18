@@ -1,1 +1,1 @@
-![hrms_sql](https://user-images.githubusercontent.com/76704724/122036344-214b1500-cddc-11eb-8ac4-163af1d8c7d9.png)
+![hrms_sql](https://user-images.githubusercontent.com/76704724/122486450-c84cce00-cfe1-11eb-98e5-63c0576f236a.png)
