@@ -104,6 +104,7 @@ CREATE TABLE public.job_postings
     posted_date date NOT NULL,
     work_type_id integer,
     work_time_id integer,
+    is_open_employer boolean,
     PRIMARY KEY (id)
 );
 
